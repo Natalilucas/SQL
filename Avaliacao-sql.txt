@@ -1,0 +1,55 @@
+CREATE VIEW Ex_a AS
+SELECT * FROM cliente WHERE email LIKE '%gmail%' OR contacto LIKE '91%' OR contacto LIKE '96%';
+
+SELECT * from EX_A;
+
+CREATE VIEW Ex_B AS
+SELECT *, CURRENT_DATE - emprestimo.data_emprestimo as DIAS
+FROM emprestimo  
+WHERE data_devolucao IS NULL 
+
+SELECT * from EX_B;
+
+SELECT DISTINCT YEAR(data_emprestimo), COUNT(emprestimo.id_emprestimo) FROM emprestimo GROUP by YEAR(data_emprestimo)
+
+SELECT * from EX_C;
+
+CREATE VIEW ex_d AS
+SELECT editora.nome_editora, COUNT(livro.id_editora) AS qtLivros
+FROM livro 
+JOIN editora ON livro.id_editora = editora.id_editora
+GROUP BY livro.id_editora
+HAVING COUNT(*) > 3;
+
+SELECT * FROM ex_d 
+
+CREATE VIEW ex_e AS
+SELECT COUNT(livro.id_genero) as Qt_livros, genero AS Gênero FROM genero
+JOIN livro ON livro.id_genero = genero.id_genero GROUP BY genero
+
+SELECT * FROM ex_e
+
+CREATE VIEW ex_f AS
+SELECT editora.nome_editora as Nome_Editora, genero AS Gênero
+FROM editora
+JOIN livro  ON livro.id_editora = editora.id_editora
+JOIN genero ON genero.id_genero = livro.id_livro
+ORDER BY editora.nome_editora
+
+
+CREATE VIEW ex_g AS
+SELECT COUNT(*) emprestimo, autor.nome_autor FROM emprestimo
+JOIN livro ON livro.id_livro = emprestimo.id_livro
+JOIN autor ON autor.id_autor = livro.id_autor
+WHERE autor.pais <> 'EUA'
+GROUP BY autor.nome_autor
+ORDER by emprestimo DESC
+LIMIT 3
+
+CREATE VIEW ex_h AS
+SELECT livro.titulo, cliente.nome, cliente.email, emprestimo.data_emprestimo
+FROM emprestimo
+JOIN cliente ON emprestimo.id_cliente = cliente.id_cliente
+JOIN livro ON livro.id_livro = emprestimo.id_livro
+WHERE emprestimo.data_devolucao IS NULL
+ORDER BY emprestimo.data_emprestimo ASC
